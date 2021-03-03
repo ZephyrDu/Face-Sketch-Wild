@@ -1,7 +1,7 @@
 import os
 import sys
 
-gpus = '2'
+gpus = '0'
 if sys.argv[1] == '1':
     test_dir         = './data/CUFS/test_photos'
     test_gt_dir      = './data/CUFS/test_sketches'

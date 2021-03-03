@@ -1,8 +1,7 @@
 import os
 import random
 
-#  gpus          = '1,2'
-gpus           = '1'
+gpus           = '0'
 seed           = 12345 
 batch_size     = 6
 learning_rate  = 1e-3

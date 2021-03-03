@@ -1,4 +1,4 @@
-from components import *
+from .components import *
 
 class SketchNet(nn.Module):
     """SketchNet, transform input RGB photo to gray sketch.

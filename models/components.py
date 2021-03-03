@@ -27,9 +27,9 @@ class NormLayer(nn.Module):
         super(NormLayer, self).__init__()
         norm_type = norm_type.lower()
         if norm_type == 'in':
-            self.norm_func = nn.InstanceNorm2d(channels, affine=True)
+            self.norm_func = nn.InstanceNorm2d(channels, affine=True, track_running_stats=True)
         elif norm_type == 'bn':
-            self.norm_func == nn.BatchNorm2d(channels, affine=True)
+            self.norm_func == nn.BatchNorm2d(channels, affine=True, track_running_stats=True)
         elif norm_type == 'none':
             self.norm_func = lambda x: x
         else:
