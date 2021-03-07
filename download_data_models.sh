@@ -1,11 +1,10 @@
 #!/bin/bash
 
-PROJECT_DIR=$PWD
-mkdir $PROJECT_DIR/data
-mkdir $PROJECT_DIR/pretrain_model
+mkdir $PWD/data
+mkdir $PWD/pretrain_model
 echo 'Downloading Datasets'
-wget http://www.visionlab.cs.hku.hk/data/Face-Sketch-Wild/datasets.tgz -P $PROJECT_DIR/data
+wget http://www.visionlab.cs.hku.hk/data/Face-Sketch-Wild/datasets.tgz -P $PWD/data
 echo 'Downloading Pretrain Models'
-wget http://www.visionlab.cs.hku.hk/data/Face-Sketch-Wild/models.tgz -P $PROJECT_DIR/pretrain_model
+wget http://www.visionlab.cs.hku.hk/data/Face-Sketch-Wild/models.tgz -P $PWD/pretrain_model
 
 
