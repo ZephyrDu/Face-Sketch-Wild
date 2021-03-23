@@ -17,18 +17,6 @@ def total_variation(x):
             ) + torch.sum(torch.abs(x[:, :, :-1, :] - x[:, :, 1:, :]))
 
 
-def feature_mse_loss_func(x, y, vgg_model, mask=None, layer=['r51']):
-    """
-    Feature loss define by vgg layer.
-    """
-    if mask is not None:
-        x = MaskGrad(mask)(x)
-    x_feat = vgg_model(x, layer)
-    y_feat = vgg_model(y, layer)
-    loss = sum([nn.MSELoss()(a, b) for a, b in zip(x_feat, y_feat)])
-    return loss 
-
-
 def feature_mrf_loss_func(x, y, vgg_model=None, layer=[], match_img_vgg=[], topk=1):
     assert isinstance(match_img_vgg, list), 'Parameter match_img_vgg should be a list'
     mrf_crit = MRFLoss(topk=topk)
