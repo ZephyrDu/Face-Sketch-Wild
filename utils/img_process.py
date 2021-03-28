@@ -2,7 +2,7 @@ import torch
 from torchvision import transforms
 import numpy as np
 from PIL import Image, ImageDraw, ImageFilter
-import dlib
+#import dlib
 
 from .utils import tensorToVar
 

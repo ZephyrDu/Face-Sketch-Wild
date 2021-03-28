@@ -4,6 +4,7 @@ import torch.nn as nn
 from torch.optim import Adam
 from torch.optim.lr_scheduler import MultiStepLR
 from torchvision import transforms
+from torch.utils.data import DataLoader
 
 import argparse
 import os

@@ -1,23 +1,20 @@
 import numpy as np
 from skimage.measure import compare_ssim
-import matlab_wrapper
+import image_similarity_measures
 import os
 import cv2 as cv
 from PIL import Image
 
-def FSIM(matlab, gt_img, test_img):
+def FSIM(gt_img, test_img):
     """Calculate FSIM score.
     -------------------------
     Use matlab wrapper to calculate fsim score.
     Codes come from: https://github.com/gregfreeman/image_quality_toolbox 
     """
-    test_img = np.array(test_img)
-    gt_img = np.array(gt_img)
-    matlab.eval("addpath('./utils')")
-    matlab.put('imageRef', gt_img)
-    matlab.put('imageDis', test_img)
-    matlab.eval('[score, fsimc] = FeatureSIM(imageRef, imageDis)')
-    tmp_score = matlab.get('score')
+    tmp_score=image_similarity_measures.evaluation(
+        org_img_path=gt_img,
+        pred_img_path=test_img,
+        metrics='test_img')
     return tmp_score
 
 
@@ -36,8 +33,6 @@ def avg_score(test_dir, gt_dir, metric_name='ssim', smooth=False, sigma=75, verb
     """
     metric_name = metric_name.lower()
     all_score = []
-    if metric_name == 'fsim':
-        matlab = matlab_wrapper.MatlabSession()
     for name in sorted(sorted(os.listdir(gt_dir))):
         test_img = Image.open(os.path.join(test_dir, name)).convert('L')
         gt_img = Image.open(os.path.join(gt_dir, name)).convert('L')
@@ -47,7 +42,7 @@ def avg_score(test_dir, gt_dir, metric_name='ssim', smooth=False, sigma=75, verb
         if metric_name == 'ssim':
             tmp_score = SSIM(gt_img, test_img)
         elif metric_name == 'fsim':
-            tmp_score = FSIM(matlab, gt_img, test_img)
+            tmp_score = FSIM(gt_img, test_img)
         if verbose:
             print('Image: {}, Metric: {}, Smooth: {}, Score: {}'.format(name, metric_name, smooth, tmp_score))
         all_score.append(tmp_score)

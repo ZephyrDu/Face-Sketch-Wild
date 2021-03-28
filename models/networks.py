@@ -9,6 +9,12 @@ class SketchNet(nn.Module):
     """
     def __init__(self, in_channels=3, out_channels=1, norm_type='IN'):
         super(SketchNet, self).__init__()
+        self._norm_layer = nn.BatchNorm2d
+        self.dilation = 1
+        self.inplanes = 64
+        self.groups = 1
+        self.base_width = 64
+
         # Downsample convolution layers
         self.conv1 = ConvLayer(in_channels, 32, kernel_size=3, stride=1, bias=False)
         self.norm1 = NormLayer(32, norm_type)
@@ -17,8 +23,6 @@ class SketchNet(nn.Module):
         self.conv3 = ConvLayer(64, 128, kernel_size=3, stride=2, bias=False)
         self.norm3 = NormLayer(128, norm_type)
 
-        #
-        self.invo1 = involution(in_channels,kernel_size=3, stride=1)
 
         # Residual layers
         self.res1 = ResidualBlock(128, norm_type)
@@ -33,6 +37,11 @@ class SketchNet(nn.Module):
         self.deconv2 = UpsampleConvLayer(128, 32, kernel_size=3, stride=1, bias=False, upsample=2)
         self.norm5 = NormLayer(32, norm_type)
         self.deconv3 = ConvLayer(64, out_channels, kernel_size=3, stride=1, bias=True)
+
+
+        # Involution layers
+        self.invol1 = involution(256, kernel_size=3, stride=1)
+        self.invol2 = involution(128, kernel_size=3, stride=1)
 
         # SA Layers
         layers = [3, 4, 6, 3]
