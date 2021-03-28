@@ -1,8 +1,10 @@
 # Face Sketch Synthesis in the Wild
 
-PyTorch implementation for face sketch synthesis in the wild through semi-supervised learning. Here is an example:
+- This project use [**Face Sketch Synthesis in the Wild**](https://github.com/chaofengc/Face-Sketch-Wild) as the baseline. 
+- Working to modify some modules to make the model better in some way.
+- Currently we have a [**shuffle-attention module**](https://github.com/wofmanaf/SA-Net) and [**involution operators**](https://github.com/d-li14/involution).
 
-![](example_img.png)
+# The following readme content are the same as [**Face Sketch Synthesis in the Wild**](https://github.com/chaofengc/Face-Sketch-Wild).
 
 [**Semi-Supervised Learning for Face Sketch Synthesis in the Wild.**](https://arxiv.org/abs/1812.04929)  
 [Chaofeng Chen](https://chaofengc.github.io), [Wei Liu](http://www.visionlab.cs.hku.hk/people.html), [Xiao Tan](http://www.xtan.org/), [Kwan-Yee K. Wong](http://i.cs.hku.hk/~kykwong/).   
