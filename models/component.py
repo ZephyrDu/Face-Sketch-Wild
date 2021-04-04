@@ -164,7 +164,6 @@ def conv1x1(in_channels, out_channels, stride=1):
 
 class SABottleneck(nn.Module):
     expansion = 4
-    __constants__ = ['downsample']
 
     def __init__(self, in_channels, channels, stride=1, downsample=None, groups=1,
                  base_width=64, dilation=1, norm_layer=None):

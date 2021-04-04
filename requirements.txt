@@ -3,4 +3,4 @@ torchvision>=0.2
 scipy>=1.1.0
 numpy>=1.14.1
 opencv-python>=3.4.1
-matlab_wrapper
+image_similarity_measures

@@ -8,8 +8,6 @@ from PIL import Image
 def FSIM(gt_img, test_img):
     """Calculate FSIM score.
     -------------------------
-    Use matlab wrapper to calculate fsim score.
-    Codes come from: https://github.com/gregfreeman/image_quality_toolbox 
     """
     tmp_score=image_similarity_measures.evaluation(
         org_img_path=gt_img,
