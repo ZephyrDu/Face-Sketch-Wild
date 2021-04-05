@@ -30,18 +30,18 @@ def cmd_option():
     arg_parser = argparse.ArgumentParser(description='CMD arguments for the face sketch network')
     arg_parser.add_argument('train_eval', type=str, default='train', help='Train or eval')
     arg_parser.add_argument('--gpus', type=str, default='0', help='Which gpus to train the model')
-    arg_parser.add_argument('--train_data', type=str, nargs='*',
+    arg_parser.add_argument('--train-data', type=str, nargs='*',
                             default=["./data/AR/train_photos", "./data/CUHK_student/train_photos",
                                      "./data/XM2VTS/train_photos", "./data/CUFSF/train_photos"],
                             help="Train data dir root")
     arg_parser.add_argument('--resume', type=int, default=0, help='Resume training or not')
-    arg_parser.add_argument('--train_style', type=str, default='cufs', help='Styles used to train')
+    arg_parser.add_argument('--train-style', type=str, default='cufs', help='Styles used to train')
     arg_parser.add_argument('--seed', type=int, default=1234, help='Random seed for training')
-    arg_parser.add_argument('--batch_size', type=int, default=6, help='Train batch size')
+    arg_parser.add_argument('--batch-size', type=int, default=6, help='Train batch size')
     arg_parser.add_argument('--lr', type=float, default=1e-3, help='Learning rate for training')
     arg_parser.add_argument('--epochs', type=int, default=40, help='Training epochs to generate')
-    arg_parser.add_argument('--weight_root', type=str, default='./weight', help='Weight saving path')
-    arg_parser.add_argument('--vgg19_weight', type=str, default='/home/cfchen/pytorch_models/vgg_conv.pth',
+    arg_parser.add_argument('--weight-root', type=str, default='./weight', help='Weight saving path')
+    arg_parser.add_argument('--vgg19-weight', type=str, default='/home/cfchen/pytorch_models/vgg_conv.pth',
                             help='Pretrained vgg19 weight path')
     arg_parser.add_argument('--Gnorm', type=str, default='IN',
                             help="Instance(IN) normalization or batch(BN) normalization")
@@ -55,10 +55,10 @@ def cmd_option():
     arg_parser.add_argument('--meanshift', type=int, default=20, help="mean shift of the predicted sketch.")
     arg_parser.add_argument('--other', type=str, default='', help="Other information")
 
-    arg_parser.add_argument('--test_dir', type=str, default='', help='Test image directory')
-    arg_parser.add_argument('--test_gt_dir', type=str, default='', help='Test ground truth image directory')
-    arg_parser.add_argument('--result_dir', type=str, default='./result', help='Result saving directory')
-    arg_parser.add_argument('--test_weight_path', type=str, default='', help='Test model path')
+    arg_parser.add_argument('--test-dir', type=str, default='', help='Test image directory')
+    arg_parser.add_argument('--test-gt-dir', type=str, default='', help='Test ground truth image directory')
+    arg_parser.add_argument('--result-dir', type=str, default='./result', help='Result saving directory')
+    arg_parser.add_argument('--test-weight-path', type=str, default='', help='Test model path')
     return arg_parser.parse_args()
 
 
