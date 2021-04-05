@@ -30,7 +30,7 @@ def avg_score(test_dir, gt_dir, metric_name='ssim', smooth=False, sigma=75, verb
         if metric_name == 'ssim':
             tmp_score = calculate_ssim(gt_img, test_img)
         elif metric_name == 'fsim':
-            tmp_score = fsim(gt_img, test_img)
+            tmp_score = calculate_fsim(gt_img, test_img)
         if verbose:
             print('Image: {}, Metric: {}, Smooth: {}, Score: {}'.format(name, metric_name, smooth, tmp_score))
         all_score.append(tmp_score)
