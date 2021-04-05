@@ -89,7 +89,6 @@ def train(args):
     Gnet.to(device)
     Dnet.to(device)
     if len(gpu_ids) > 0:
-
         Gnet = nn.DataParallel(Gnet, device_ids=gpu_ids)
         Dnet = nn.DataParallel(Dnet, device_ids=gpu_ids)
         vgg19_model = nn.DataParallel(vgg19_model, device_ids=gpu_ids)
@@ -114,7 +113,7 @@ def train(args):
     scheduler_D = MultiStepLR(optim_D, milestones=ms, gamma=0.1)
     mse_crit = nn.MSELoss()
 
-    # ---------------------- Define reference styles and feature loss layers ----------        
+    # ---------------------- Define reference styles and feature loss layers ----------
     if args.train_style == 'cufs':
         ref_style_dataset = ['CUHK_student', 'AR', 'XM2VTS']
         ref_feature = './data/cufs_feature_dataset.pth'
@@ -128,12 +127,10 @@ def train(args):
 
     vgg_feature_layers = ['r11', 'r21', 'r31', 'r41', 'r51']
     feature_loss_layers = list(itertools.compress(vgg_feature_layers, args.flayers))
-
+    print("Initialized")
     log = logger.Logger(args.save_weight_path)
 
     for e in range(args.epochs):
-        scheduler_G.step()
-        scheduler_D.step()
         sample_count = 0
         for batch_idx, batch_data in enumerate(data_loader):
             # ---------------- Load data -------------------
@@ -157,7 +154,7 @@ def train(args):
             real_label = torch.ones_like(fake_score)
             fake_label = torch.zeros_like(fake_score)
 
-            # ----------------- Calculate loss and backward ------------------- 
+            # ----------------- Calculate loss and backward -------------------
             train_img_org_vgg = img_process.subtract_mean_batch(train_img_org, 'face')
             topk_sketch_img_vgg = img_process.subtract_mean_batch(topk_sketch_img, 'sketch')
             topk_photo_img_vgg = img_process.subtract_mean_batch(topk_photo_img, 'face')
@@ -176,7 +173,7 @@ def train(args):
             loss_G = style_loss * args.weight[0] + adv_loss + tv_loss
             loss_D = 0.5 * mse_crit(fake_score, fake_label) + 0.5 * mse_crit(real_score, real_label)
 
-            # Update parameters 
+            # Update parameters
             optim_D.zero_grad()
             loss_D.backward(retain_graph=True)
             optim_D.step()
@@ -185,11 +182,16 @@ def train(args):
             loss_G.backward()
             optim_G.step()
 
+            scheduler_G.step()
+            scheduler_D.step()
+
             end = time()
             train_time = end - start
 
-            # ----------------- Print result and log the output ------------------- 
-            log.iterLogUpdate(loss_G.data[0])
+            # ----------------- Print result and log the output -------------------
+            print("loss_G ", loss_G)
+
+            log.iterLogUpdate(loss_G.item())
             if batch_idx % 100 == 0:
                 log.draw_loss_curve()
 
@@ -197,7 +199,7 @@ def train(args):
                   ":.2f}\tLoss: G-{:.4f}, Adv-{:.4f}, tv-{:.4f}, D-{:.4f}".format(
                 datetime.now(),
                 e, args.epochs, sample_count, len(dataset),
-                data_time, train_time, *[x.data[0] for x in [loss_G, adv_loss, tv_loss, loss_D]])
+                data_time, train_time, *[x for x in [loss_G.item(), adv_loss, tv_loss, loss_D]])
             print(msg)
             log_file = open(os.path.join(args.save_weight_path, 'log.txt'), 'a+')
             log_file.write(msg + '\n')
