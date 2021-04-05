@@ -4,4 +4,3 @@ scipy>=1.1.0
 numpy>=1.14.1
 opencv-python>=3.4.1
 matplotlib~=3.3.3
-Pillow~=8.0.1
