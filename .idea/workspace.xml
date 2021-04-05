@@ -3,8 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="13c3dbaa-0b98-4c83-b68d-eafb5439d5e5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/metric.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/metric.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/face2sketch_wild.py" beforeDir="false" afterPath="$PROJECT_DIR$/face2sketch_wild.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,6 +19,9 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedIndex" value="1" />
   </component>
   <component name="ProjectId" id="1pQHIgrg9s21DdpAwIVQ8n1AbCX" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -57,14 +59,7 @@
       <option name="project" value="LOCAL" />
       <updated>1617595235216</updated>
     </task>
-    <task id="LOCAL-00002" summary=".">
-      <created>1617602157666</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1617602157666</updated>
-    </task>
-    <option name="localTasksCounter" value="3" />
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
