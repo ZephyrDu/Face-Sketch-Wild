@@ -1,7 +1,6 @@
 from __future__ import print_function
 import torch
 import torch.nn as nn
-from torch.optim import Adam
 from torch.optim.lr_scheduler import MultiStepLR
 from torchvision import transforms
 from torch.utils.data import DataLoader
@@ -107,8 +106,9 @@ def train(args):
     args.epochs = max(int(args.epochs), 4)
     ms = [int(1. / 4 * args.epochs), int(2. / 4 * args.epochs)]
 
-    optim_G = Adam(Gnet.parameters(), args.lr)
-    optim_D = Adam(Dnet.parameters(), args.lr)
+    optim_G = torch.optim.SGD(Gnet.parameters(), args.lr, momentum=0.9, weight_decay=1e-4)
+    # optim_G = torch.optim.Adam(Gnet.parameters(), args.lr)
+    optim_D = torch.optim.Adam(Dnet.parameters(), args.lr)
     scheduler_G = MultiStepLR(optim_G, milestones=ms, gamma=0.1)
     scheduler_D = MultiStepLR(optim_D, milestones=ms, gamma=0.1)
     mse_crit = nn.MSELoss()
@@ -225,6 +225,7 @@ def test(args):
         Gnet = nn.DataParallel(Gnet, device_ids=gpu_ids)
     Gnet.eval()
     Gnet.load_state_dict(torch.load(args.test_weight_path))
+    print("Initialized")
 
     utils.mkdirs(args.result_dir)
     for img_name in os.listdir(args.test_dir):

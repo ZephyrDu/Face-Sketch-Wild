@@ -7,8 +7,8 @@ import cv2
 import os
 
 def calculate_ssim(gt_img, test_img):
-    #return ssim(gt_img, test_img) # structural_similarity(org_img, pred_img, data_range=max_p, multichannel=True)
-    return compare_ssim(gt_img, test_img, gaussian_weights=True, sigma=1.5, use_sample_covariance=False)
+    return ssim(gt_img, test_img) # structural_similarity(org_img, pred_img, data_range=max_p, multichannel=True)
+    #return compare_ssim(gt_img, test_img, gaussian_weights=True, sigma=1.5, use_sample_covariance=False)
 
 def calculate_fsim(gt_img, test_img):
     return fsim(gt_img, test_img)
