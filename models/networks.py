@@ -42,7 +42,6 @@ class SketchNet(nn.Module):
         # Involution layers
         self.invo1 = involution(256, kernel_size=3, stride=1)
         self.invo2 = involution(128, kernel_size=3, stride=1)
-        self.invo3 = involution(64, kernel_size=3, stride=1)
 
         # Non-linear layer
         self.relu = nn.ReLU(True)
@@ -64,7 +63,6 @@ class SketchNet(nn.Module):
         y_deconv1 = self.invo2(y_deconv1)
         y_deconv2 = self.relu(self.norm5(self.deconv2(y_deconv1)))
         y_deconv2 = torch.cat((y_deconv2, y_conv1), 1)
-        y_deconv2 = self.invo3(y_deconv2)
         y = self.deconv3(y_deconv2)
 
         return y
