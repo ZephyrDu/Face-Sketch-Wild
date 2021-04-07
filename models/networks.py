@@ -16,6 +16,7 @@ class SketchNet(nn.Module):
         self.inplanes = 64
         self.groups = 1
         self.base_width = 64
+
         # Downsample convolution layers
         self.conv1 = ConvLayer(in_channels, 32, kernel_size=3, stride=1, bias=False)
         self.norm1 = NormLayer(32, norm_type)
@@ -38,10 +39,6 @@ class SketchNet(nn.Module):
         self.norm5 = NormLayer(32, norm_type)
         self.deconv3 = ConvLayer(64, out_channels, kernel_size=3, stride=1, bias=True)
         self.deconv4 = ConvLayer(256, out_channels, kernel_size=3, stride=1, bias=True)
-
-        # Involution layers
-        self.invo1 = involution(256, kernel_size=3, stride=1)
-        self.invo2 = involution(128, kernel_size=3, stride=1)
 
         # Non-linear layer
         self.relu = nn.ReLU(True)
@@ -77,10 +74,10 @@ class DNet(nn.Module):
         b = True if norm_type == 'none' else False
 
         # Involution layers
-        self.invo1 = involution(256, kernel_size=3, stride=1)
-        # self.invo2 = involution(128, kernel_size=3, stride=1)
+        self.invo1 = involution(128, kernel_size=3, stride=1)
+        self.invo2 = involution(256, kernel_size=7, stride=1)
 
-        self.net = nn.Sequential(
+        self.net1 = nn.Sequential(
             ConvLayer(in_channels, 32, kernel_size=3, stride=2, bias=True),
             nn.ReLU(inplace=True),
             ConvLayer(32, 64, kernel_size=3, stride=2, bias=b),
@@ -89,6 +86,9 @@ class DNet(nn.Module):
             ConvLayer(64, 128, kernel_size=3, stride=2, bias=b),
             NormLayer(128, norm_type),
             nn.ReLU(inplace=True),
+
+        )
+        self.net2= nn.Sequential(
             ConvLayer(128, 256, kernel_size=3, stride=2, bias=b),
             NormLayer(256, norm_type),
             nn.ReLU(inplace=True),
@@ -96,7 +96,9 @@ class DNet(nn.Module):
         self.last = ConvLayer(256, 1, kernel_size=3, stride=1, bias=True)
 
     def forward(self, x):
-        out = self.net(x)
+        out = self.net1(x)
         out = self.invo1(out)
+        out = self.net2(out)
+        out = self.invo2(out)
         out = self.last(out)
         return out
