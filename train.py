@@ -3,7 +3,7 @@ import random
 
 gpus           = '0'
 seed           = 12345 
-batch_size     = 6
+batch_size     = 8
 learning_rate  = 1e-3
 epochs         = 40 
 vgg_weight     = './pretrain_model/vgg_conv.pth'
