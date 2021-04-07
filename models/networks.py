@@ -16,7 +16,6 @@ class SketchNet(nn.Module):
         self.inplanes = 64
         self.groups = 1
         self.base_width = 64
-
         # Downsample convolution layers
         self.conv1 = ConvLayer(in_channels, 32, kernel_size=3, stride=1, bias=False)
         self.norm1 = NormLayer(32, norm_type)
@@ -40,6 +39,10 @@ class SketchNet(nn.Module):
         self.deconv3 = ConvLayer(64, out_channels, kernel_size=3, stride=1, bias=True)
         self.deconv4 = ConvLayer(256, out_channels, kernel_size=3, stride=1, bias=True)
 
+        # Involution layers
+        self.invo1 = involution(256, kernel_size=3, stride=1)
+        self.invo2 = involution(128, kernel_size=3, stride=1)
+
         # Non-linear layer
         self.relu = nn.ReLU(True)
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
@@ -54,8 +57,10 @@ class SketchNet(nn.Module):
         y = self.res4(y)
         y_deconv0 = self.res5(y)
         y_deconv0 = torch.cat((y_deconv0, y_conv3), 1)
+        y_deconv0 = self.invo1(y_deconv0)
         y_deconv1 = self.relu(self.norm4(self.deconv1(y_deconv0)))
         y_deconv1 = torch.cat((y_deconv1, y_conv2), 1)
+        y_deconv1 = self.invo2(y_deconv1)
         y_deconv2 = self.relu(self.norm5(self.deconv2(y_deconv1)))
         y_deconv2 = torch.cat((y_deconv2, y_conv1), 1)
         y = self.deconv3(y_deconv2)
@@ -70,6 +75,10 @@ class DNet(nn.Module):
     def __init__(self, in_channels=1, norm_type='IN'):
         super(DNet, self).__init__()
         b = True if norm_type == 'none' else False
+
+        # Involution layers
+        self.invo1 = involution(256, kernel_size=3, stride=1)
+        # self.invo2 = involution(128, kernel_size=3, stride=1)
 
         self.net = nn.Sequential(
             ConvLayer(in_channels, 32, kernel_size=3, stride=2, bias=True),
@@ -88,5 +97,6 @@ class DNet(nn.Module):
 
     def forward(self, x):
         out = self.net(x)
+        out = self.invo1(out)
         out = self.last(out)
         return out
