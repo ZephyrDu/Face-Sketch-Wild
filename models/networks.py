@@ -45,7 +45,6 @@ class SketchNet(nn.Module):
         self.invo3 = involution(64, kernel_size=3, stride=1)
 
         # Non-linear layer
-        num_classes = 1000
         self.relu = nn.ReLU(True)
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
 
