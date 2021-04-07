@@ -9,3 +9,4 @@ scikit-image
 mmcv
 phasepack
 pyfftw
+cupy

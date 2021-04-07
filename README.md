@@ -2,7 +2,7 @@
 
 - This project use [**Face Sketch Synthesis in the Wild**](https://github.com/chaofengc/Face-Sketch-Wild) as the baseline. 
 - Working to modify some modules to make the model better in some way.
-- Currently we have a [**shuffle-attention module**](https://github.com/wofmanaf/SA-Net) and [**involution operators**](https://github.com/d-li14/involution).
+
 
 # The following readme content are the same as [**Face Sketch Synthesis in the Wild**](https://github.com/chaofengc/Face-Sketch-Wild).
 

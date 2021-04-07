@@ -39,42 +39,15 @@ class SketchNet(nn.Module):
         self.deconv3 = ConvLayer(64, out_channels, kernel_size=3, stride=1, bias=True)
         self.deconv4 = ConvLayer(256, out_channels, kernel_size=3, stride=1, bias=True)
 
-        # SA Layers
-
-        # whether to replace the 2x2 stride with a dilated convolution instead
-        replace_stride_with_dilation = [False, False, False]
-
-        self.salayer1 = self._make_layer(SABottleneck, 64, 3)
+        # Involution layers
+        self.invo1 = involution(256, kernel_size=3, stride=1)
+        self.invo2 = involution(128, kernel_size=3, stride=1)
+        self.invo3 = involution(64, kernel_size=3, stride=1)
 
         # Non-linear layer
         num_classes = 1000
         self.relu = nn.ReLU(True)
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
-        self.fc = nn.Linear(512 * SABottleneck.expansion, num_classes)
-
-    def _make_layer(self, block, planes, blocks, stride=1, dilate=False):
-        norm_layer = self._norm_layer
-        downsample = None
-        previous_dilation = self.dilation
-        if dilate:
-            self.dilation *= stride
-            stride = 1
-        if stride != 1 or self.inplanes != planes * block.expansion:
-            downsample = nn.Sequential(
-                conv1x1(self.inplanes, planes * block.expansion, stride),
-                norm_layer(planes * block.expansion),
-            )
-
-        layers = []
-        layers.append(block(self.inplanes, planes, stride, downsample, self.groups,
-                            self.base_width, previous_dilation, norm_layer))
-        self.inplanes = planes * block.expansion
-        for _ in range(1, blocks):
-            layers.append(block(self.inplanes, planes, groups=self.groups,
-                                base_width=self.base_width, dilation=self.dilation,
-                                norm_layer=norm_layer))
-
-        return nn.Sequential(*layers)
 
     def forward(self, X):
         y_conv1 = self.relu(self.norm1(self.conv1(X)))
@@ -86,14 +59,16 @@ class SketchNet(nn.Module):
         y = self.res4(y)
         y_deconv0 = self.res5(y)
         y_deconv0 = torch.cat((y_deconv0, y_conv3), 1)
+        y_deconv0 = self.invo1(y_deconv0)
         y_deconv1 = self.relu(self.norm4(self.deconv1(y_deconv0)))
         y_deconv1 = torch.cat((y_deconv1, y_conv2), 1)
+        y_deconv1 = self.invo2(y_deconv1)
         y_deconv2 = self.relu(self.norm5(self.deconv2(y_deconv1)))
         y_deconv2 = torch.cat((y_deconv2, y_conv1), 1)
-        # y = self.deconv3(y_deconv2)
-        y_0 = self.salayer1(y_deconv2)
-        y_1 = self.deconv4(y_0)
-        return y_1
+        y_deconv2 = self.invo3(y_deconv2)
+        y = self.deconv3(y_deconv2)
+
+        return y
 
 
 class DNet(nn.Module):
@@ -106,7 +81,7 @@ class DNet(nn.Module):
 
         # Involution layers
         self.invo1 = involution(256, kernel_size=3, stride=1)
-        self.invo2 = involution(128, kernel_size=3, stride=1)
+        # self.invo2 = involution(128, kernel_size=3, stride=1)
 
         self.net = nn.Sequential(
             ConvLayer(in_channels, 32, kernel_size=3, stride=2, bias=True),
