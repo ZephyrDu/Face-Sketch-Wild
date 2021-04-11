@@ -98,6 +98,7 @@ def init_weights(m):
         nn.init.xavier_uniform_(m.weight)
         m.bias.data.zero_()
 
+
 class SelfAttention(nn.Module):
     def __init__(self):
         super(SelfAttention, self).__init__()
@@ -111,16 +112,17 @@ class SelfAttention(nn.Module):
         init_weights(self.h)
 
     def forward(self, x):
-        m_batchsize, C, width, height = x.size()
+        m_batchsize, c, width, height = x.size()
         f = self.f(x).view(m_batchsize, -1, width * height)  # B * (C//8) * (W * H)
         g = self.g(x).view(m_batchsize, -1, width * height)  # B * (C//8) * (W * H)
         h = self.h(x).view(m_batchsize, -1, width * height)  # B * C * (W * H)
         attention = torch.bmm(f.permute(0, 2, 1), g)  # B * (W * H) * (W * H)
         attention = self.softmax(attention)
         self_attetion = torch.bmm(h, attention)  # B * C * (W * H)
-        self_attetion = self_attetion.view(m_batchsize, C, width, height)  # B * C * W * H
+        self_attetion = self_attetion.view(m_batchsize, c, width, height)  # B * C * W * H
         out = self.gamma * self_attetion + x
         return out
+
 
 """
 # Unused ChannelAttention module
