@@ -106,8 +106,8 @@ def train(args):
     args.epochs = max(int(args.epochs), 4)
     ms = [int(1. / 4 * args.epochs), int(2. / 4 * args.epochs)]
 
-    optim_G = torch.optim.SGD(Gnet.parameters(), args.lr, momentum=0.9, weight_decay=1e-4)
-    # optim_G = torch.optim.AdamW(Gnet.parameters(), args.lr)
+    # optim_G = torch.optim.SGD(Gnet.parameters(), args.lr, momentum=0.9, weight_decay=1e-4)
+    optim_G = torch.optim.AdamW(Gnet.parameters(), args.lr)
     optim_D = torch.optim.AdamW(Dnet.parameters(), args.lr)
     scheduler_G = MultiStepLR(optim_G, milestones=ms, gamma=0.1)
     scheduler_D = MultiStepLR(optim_D, milestones=ms, gamma=0.1)
