@@ -91,11 +91,10 @@ class UpsampleConvLayer(nn.Module):
         return out
 
 
-def init_conv(conv, glu=True):
-    nn.init.xavier_uniform_(conv.weight)
-    if conv.bias is not None:
-        conv.bias.data.zero_()
-
+def init_weights(m):
+    if type(m) == nn.Linear or type(m) == nn.Conv2d:
+        nn.init.xavier_uniform_(m.weight)
+        m.bias.data.zero_()
 
 class SelfAttention(nn.Module):
     def __init__(self):
@@ -105,9 +104,9 @@ class SelfAttention(nn.Module):
         self.h = nn.Conv2d(in_channels=128, out_channels=128, kernel_size=1)
         self.gamma = nn.Parameter(torch.zeros(1))
         self.softmax = nn.Softmax(dim=-1)
-        init_conv(self.f)
-        init_conv(self.g)
-        init_conv(self.h)
+        init_weights(self.f)
+        init_weights(self.g)
+        init_weights(self.h)
 
     def forward(self, x):
         m_batchsize, C, width, height = x.size()

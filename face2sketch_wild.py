@@ -127,6 +127,8 @@ def train(args):
 
     vgg_feature_layers = ['r11', 'r21', 'r31', 'r41', 'r51']
     feature_loss_layers = list(itertools.compress(vgg_feature_layers, args.flayers))
+    utils.print_network(Gnet)
+    utils.print_network(Dnet)
     print("Initialized")
     log = logger.Logger(args.save_weight_path)
 

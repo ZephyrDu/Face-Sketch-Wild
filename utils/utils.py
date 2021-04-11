@@ -14,6 +14,14 @@ def mkdirs(dirs):
         raise Exception('dirs should be list or string.')
 
 
+def print_network(net):
+    num_params = 0
+    for param in net.parameters():
+        num_params += param.numel()
+    print(net)
+    print('Total number of parameters: %d' % num_params)
+
+
 def to_device(tensor):
     """
     Move tensor to device. If GPU is is_available, move to GPU.
