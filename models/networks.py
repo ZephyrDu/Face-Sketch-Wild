@@ -1,5 +1,4 @@
-from .involution_cuda import involution
-from .component import *
+from .components import *
 
 
 class SketchNet(nn.Module):
@@ -11,12 +10,6 @@ class SketchNet(nn.Module):
 
     def __init__(self, in_channels=3, out_channels=1, norm_type='IN'):
         super(SketchNet, self).__init__()
-        self._norm_layer = nn.BatchNorm2d
-        self.dilation = 1
-        self.inplanes = 64
-        self.groups = 1
-        self.base_width = 64
-
         # Downsample convolution layers
         self.conv1 = ConvLayer(in_channels, 32, kernel_size=3, stride=1, bias=False)
         self.norm1 = NormLayer(32, norm_type)
@@ -38,30 +31,31 @@ class SketchNet(nn.Module):
         self.deconv2 = UpsampleConvLayer(128, 32, kernel_size=3, stride=1, bias=False, upsample=2)
         self.norm5 = NormLayer(32, norm_type)
         self.deconv3 = ConvLayer(64, out_channels, kernel_size=3, stride=1, bias=True)
-        self.deconv4 = ConvLayer(256, out_channels, kernel_size=3, stride=1, bias=True)
 
         # Non-linear layer
         self.relu = nn.ReLU(True)
-        self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
 
-    def forward(self, X):
-        y_conv1 = self.relu(self.norm1(self.conv1(X)))
+        self.attention = SelfAttention()
+
+    def forward(self, x):
+        y_conv1 = self.relu(self.norm1(self.conv1(x)))
         y_conv2 = self.relu(self.norm2(self.conv2(y_conv1)))
         y_conv3 = self.relu(self.norm3(self.conv3(y_conv2)))
         y = self.res1(y_conv3)
+        y = self.attention(y)
         y = self.res2(y)
+        y = self.attention(y)
         y = self.res3(y)
+        y = self.attention(y)
         y = self.res4(y)
+        y = self.attention(y)
         y_deconv0 = self.res5(y)
         y_deconv0 = torch.cat((y_deconv0, y_conv3), 1)
-        y_deconv0 = self.invo1(y_deconv0)
         y_deconv1 = self.relu(self.norm4(self.deconv1(y_deconv0)))
         y_deconv1 = torch.cat((y_deconv1, y_conv2), 1)
-        y_deconv1 = self.invo2(y_deconv1)
         y_deconv2 = self.relu(self.norm5(self.deconv2(y_deconv1)))
         y_deconv2 = torch.cat((y_deconv2, y_conv1), 1)
         y = self.deconv3(y_deconv2)
-
         return y
 
 
@@ -72,12 +66,7 @@ class DNet(nn.Module):
     def __init__(self, in_channels=1, norm_type='IN'):
         super(DNet, self).__init__()
         b = True if norm_type == 'none' else False
-
-        # Involution layers
-        self.invo1 = involution(128, kernel_size=3, stride=1)
-        self.invo2 = involution(256, kernel_size=7, stride=1)
-
-        self.net1 = nn.Sequential(
+        self.net = nn.Sequential(
             ConvLayer(in_channels, 32, kernel_size=3, stride=2, bias=True),
             nn.ReLU(inplace=True),
             ConvLayer(32, 64, kernel_size=3, stride=2, bias=b),
@@ -86,19 +75,11 @@ class DNet(nn.Module):
             ConvLayer(64, 128, kernel_size=3, stride=2, bias=b),
             NormLayer(128, norm_type),
             nn.ReLU(inplace=True),
-
-        )
-        self.net2= nn.Sequential(
             ConvLayer(128, 256, kernel_size=3, stride=2, bias=b),
             NormLayer(256, norm_type),
             nn.ReLU(inplace=True),
+            ConvLayer(256, 1, kernel_size=3, stride=1, bias=True),
         )
-        self.last = ConvLayer(256, 1, kernel_size=3, stride=1, bias=True)
 
     def forward(self, x):
-        out = self.net1(x)
-        out = self.invo1(out)
-        out = self.net2(out)
-        out = self.invo2(out)
-        out = self.last(out)
-        return out
+        return self.net(x)

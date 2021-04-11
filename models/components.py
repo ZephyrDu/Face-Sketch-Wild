@@ -1,6 +1,5 @@
 import torch
 import torch.nn as nn
-from torch.nn.parameter import Parameter
 
 
 class ConvLayer(nn.Module):
@@ -90,3 +89,55 @@ class UpsampleConvLayer(nn.Module):
         out = self.reflection_pad(x_in)
         out = self.conv2d(out)
         return out
+
+
+def init_conv(conv, glu=True):
+    nn.init.xavier_uniform_(conv.weight)
+    if conv.bias is not None:
+        conv.bias.data.zero_()
+
+
+class SelfAttention(nn.Module):
+    def __init__(self):
+        super(SelfAttention, self).__init__()
+        self.f = nn.Conv2d(in_channels=128, out_channels=32, kernel_size=1)
+        self.g = nn.Conv2d(in_channels=128, out_channels=32, kernel_size=1)
+        self.h = nn.Conv2d(in_channels=128, out_channels=128, kernel_size=1)
+        self.gamma = nn.Parameter(torch.zeros(1))
+        self.softmax = nn.Softmax(dim=-1)
+        init_conv(self.f)
+        init_conv(self.g)
+        init_conv(self.h)
+
+    def forward(self, x):
+        m_batchsize, C, width, height = x.size()
+        f = self.f(x).view(m_batchsize, -1, width * height)  # B * (C//8) * (W * H)
+        g = self.g(x).view(m_batchsize, -1, width * height)  # B * (C//8) * (W * H)
+        h = self.h(x).view(m_batchsize, -1, width * height)  # B * C * (W * H)
+        attention = torch.bmm(f.permute(0, 2, 1), g)  # B * (W * H) * (W * H)
+        attention = self.softmax(attention)
+        self_attetion = torch.bmm(h, attention)  # B * C * (W * H)
+        self_attetion = self_attetion.view(m_batchsize, C, width, height)  # B * C * W * H
+        out = self.gamma * self_attetion + x
+        return out
+
+"""
+# Unused ChannelAttention module
+
+class ChannelAttention(nn.Module):
+    def __init__(self, in_planes, ratio=16):
+        super(ChannelAttention, self).__init__()
+        self.avg_pool = nn.AdaptiveAvgPool2d(1)
+        self.max_pool = nn.AdaptiveMaxPool2d(1)
+        self.fc1 = nn.Conv2d(in_planes, in_planes // 16, 1, bias=False)
+        self.relu1 = nn.LeakyReLU(negative_slope=0.01, inplace=False)
+        self.fc2 = nn.Conv2d(in_planes // 16, in_planes, 1, bias=False)
+
+        self.sigmoid = nn.Sigmoid()
+
+    def forward(self, x):
+        avg_out = self.fc2(self.relu1(self.fc1(self.avg_pool(x))))
+        max_out = self.fc2(self.relu1(self.fc1(self.max_pool(x))))
+        out = avg_out + max_out
+        return self.sigmoid(out)
+"""

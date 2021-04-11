@@ -4,7 +4,7 @@
 - Working to modify some modules to make the model better in some way.
 
 
-# The following readme content are the same as [**Face Sketch Synthesis in the Wild**](https://github.com/chaofengc/Face-Sketch-Wild).
+# The following readme contents are the same as [**Face Sketch Synthesis in the Wild**](https://github.com/chaofengc/Face-Sketch-Wild).
 
 [**Semi-Supervised Learning for Face Sketch Synthesis in the Wild.**](https://arxiv.org/abs/1812.04929)  
 [Chaofeng Chen](https://chaofengc.github.io), [Wei Liu](http://www.visionlab.cs.hku.hk/people.html), [Xiao Tan](http://www.xtan.org/), [Kwan-Yee K. Wong](http://i.cs.hku.hk/~kykwong/).   
