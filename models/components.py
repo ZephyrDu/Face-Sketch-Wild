@@ -98,8 +98,11 @@ def init_weights(m):
         nn.init.xavier_uniform_(m.weight)
         m.bias.data.zero_()
 
-
 class SelfAttention(nn.Module):
+    """SelfAttention
+    --------------------
+    replica of https://github.com/voletiv/self-attention-GAN-pytorch
+    """
     def __init__(self):
         super(SelfAttention, self).__init__()
         self.f = nn.Conv2d(in_channels=128, out_channels=32, kernel_size=1)

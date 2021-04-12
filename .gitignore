@@ -8,6 +8,7 @@ test/
 weight/
 eval_code/
 pretrain_model/
+.idea/
 clean_git_cache.py
 
 # Byte-compiled / optimized / DLL files
