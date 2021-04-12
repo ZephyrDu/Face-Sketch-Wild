@@ -48,7 +48,6 @@ class SketchNet(nn.Module):
         y = self.res3(y)
         y = self.attention(y)
         y = self.res4(y)
-        y = self.attention(y)
         y_deconv0 = self.res5(y)
         y_deconv0 = torch.cat((y_deconv0, y_conv3), 1)
         y_deconv1 = self.relu(self.norm4(self.deconv1(y_deconv0)))
