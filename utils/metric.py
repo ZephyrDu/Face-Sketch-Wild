@@ -1,14 +1,12 @@
 import math
 import numpy as np
 from skimage.metrics import structural_similarity
-from skimage.measure import compare_ssim
 import phasepack.phasecong as pc
 import cv2
 import os
 
 def calculate_ssim(gt_img, test_img):
     return ssim(gt_img, test_img) # structural_similarity(org_img, pred_img, data_range=max_p, multichannel=True)
-    #return compare_ssim(gt_img, test_img, gaussian_weights=True, sigma=1.5, use_sample_covariance=False)
 
 def calculate_fsim(gt_img, test_img):
     return fsim(gt_img, test_img)
@@ -21,8 +19,8 @@ def avg_score(test_dir, gt_dir, metric_name='ssim', smooth=False, sigma=75, verb
     metric_name = metric_name.lower()
     all_score = []
     for name in sorted(sorted(os.listdir(gt_dir))):
-        test_img = cv2.imread(os.path.join(test_dir, name))
-        gt_img = cv2.imread(os.path.join(gt_dir, name))
+        test_img = cv2.imread(os.path.join(test_dir, name), 0)
+        gt_img = cv2.imread(os.path.join(gt_dir, name), 0)
 
         if smooth:
             test_img = cv2.bilateralFilter(np.array(test_img), 7, sigma, sigma)
