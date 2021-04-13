@@ -6,7 +6,10 @@ import cv2
 import os
 
 def calculate_ssim(gt_img, test_img):
-    return ssim(gt_img, test_img) # structural_similarity(org_img, pred_img, data_range=max_p, multichannel=True)
+	gt_img_gray = cv2.cvtColor(gt_img, cv2.COLOR_BGR2GRAY)
+	test_img_gray = cv2.cvtColor(test_img, cv2.COLOR_BGR2GRAY)
+
+    return ssim(gt_img_gray, test_img_gray) # structural_similarity(org_img, pred_img, data_range=max_p, multichannel=True)
 
 def calculate_fsim(gt_img, test_img):
     return fsim(gt_img, test_img)
@@ -19,8 +22,8 @@ def avg_score(test_dir, gt_dir, metric_name='ssim', smooth=False, sigma=75, verb
     metric_name = metric_name.lower()
     all_score = []
     for name in sorted(sorted(os.listdir(gt_dir))):
-        test_img = cv2.imread(os.path.join(test_dir, name), 0)
-        gt_img = cv2.imread(os.path.join(gt_dir, name), 0)
+        test_img = cv2.imread(os.path.join(test_dir, name))
+        gt_img = cv2.imread(os.path.join(gt_dir, name))
 
         if smooth:
             test_img = cv2.bilateralFilter(np.array(test_img), 7, sigma, sigma)
