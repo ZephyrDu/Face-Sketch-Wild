@@ -5,11 +5,13 @@ import phasepack.phasecong as pc
 import cv2
 import os
 
-def calculate_ssim(gt_img, test_img):
-	gt_img_gray = cv2.cvtColor(gt_img, cv2.COLOR_BGR2GRAY)
-	test_img_gray = cv2.cvtColor(test_img, cv2.COLOR_BGR2GRAY)
 
-    return ssim(gt_img_gray, test_img_gray) # structural_similarity(org_img, pred_img, data_range=max_p, multichannel=True)
+def calculate_ssim(gt_img, test_img):
+    gt_img_gray = cv2.cvtColor(gt_img, cv2.COLOR_BGR2GRAY)
+    test_img_gray = cv2.cvtColor(test_img, cv2.COLOR_BGR2GRAY)
+    return ssim(gt_img_gray, test_img_gray)
+    # structural_similarity(org_img, pred_img, data_range=max_p, multichannel=True)
+
 
 def calculate_fsim(gt_img, test_img):
     return fsim(gt_img, test_img)
