@@ -35,7 +35,7 @@ class SketchNet(nn.Module):
         # Non-linear layer
         self.relu = nn.ReLU(True)
 
-        self.attention = SelfAttention()
+        self.attention = SelfAttention(128)
 
     def forward(self, x):
         y_conv1 = self.relu(self.norm1(self.conv1(x)))
@@ -48,6 +48,7 @@ class SketchNet(nn.Module):
         y = self.res3(y)
         y = self.attention(y)
         y = self.res4(y)
+        y = self.attention(y)
         y_deconv0 = self.res5(y)
         y_deconv0 = torch.cat((y_deconv0, y_conv3), 1)
         y_deconv1 = self.relu(self.norm4(self.deconv1(y_deconv0)))

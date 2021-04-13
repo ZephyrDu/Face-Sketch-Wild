@@ -101,29 +101,33 @@ def init_weights(m):
 class SelfAttention(nn.Module):
     """SelfAttention
     --------------------
-    replica of https://github.com/voletiv/self-attention-GAN-pytorch
+    replica of https://github.com/heykeetae/Self-Attention-GAN
     """
-    def __init__(self):
+    def __init__(self,in_dim):
         super(SelfAttention, self).__init__()
-        self.f = nn.Conv2d(in_channels=128, out_channels=32, kernel_size=1)
-        self.g = nn.Conv2d(in_channels=128, out_channels=32, kernel_size=1)
-        self.h = nn.Conv2d(in_channels=128, out_channels=128, kernel_size=1)
+        self.chanel_in = in_dim
+
+        self.query_conv = nn.Conv2d(in_channels = in_dim , out_channels = in_dim//8 , kernel_size= 1)
+        self.key_conv = nn.Conv2d(in_channels = in_dim , out_channels = in_dim//8 , kernel_size= 1)
+        self.value_conv = nn.Conv2d(in_channels = in_dim , out_channels = in_dim , kernel_size= 1)
         self.gamma = nn.Parameter(torch.zeros(1))
         self.softmax = nn.Softmax(dim=-1)
-        init_weights(self.f)
-        init_weights(self.g)
-        init_weights(self.h)
+        init_weights(self.query_conv)
+        init_weights(self.key_conv)
+        init_weights(self.value_conv)
 
     def forward(self, x):
-        m_batchsize, c, width, height = x.size()
-        f = self.f(x).view(m_batchsize, -1, width * height)  # B * (C//8) * (W * H)
-        g = self.g(x).view(m_batchsize, -1, width * height)  # B * (C//8) * (W * H)
-        h = self.h(x).view(m_batchsize, -1, width * height)  # B * C * (W * H)
-        attention = torch.bmm(f.permute(0, 2, 1), g)  # B * (W * H) * (W * H)
-        attention = self.softmax(attention)
-        self_attetion = torch.bmm(h, attention)  # B * C * (W * H)
-        self_attetion = self_attetion.view(m_batchsize, c, width, height)  # B * C * W * H
-        out = self.gamma * self_attetion + x
+        m_batchsize, C, width, height = x.size()
+        proj_query = self.query_conv(x).view(m_batchsize, -1, width * height).permute(0, 2, 1)  # B X CX(N)
+        proj_key = self.key_conv(x).view(m_batchsize, -1, width * height)  # B X C x (*W*H)
+        energy = torch.bmm(proj_query, proj_key)  # transpose check
+        attention = self.softmax(energy)  # BX (N) X (N)
+        proj_value = self.value_conv(x).view(m_batchsize, -1, width * height)  # B X C X N
+
+        out = torch.bmm(proj_value, attention.permute(0, 2, 1))
+        out = out.view(m_batchsize, C, width, height)
+
+        out = self.gamma * out + x
         return out
 
 
