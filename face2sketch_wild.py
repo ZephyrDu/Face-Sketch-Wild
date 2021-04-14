@@ -190,8 +190,6 @@ def train(args):
             train_time = end - start
 
             # ----------------- Print result and log the output -------------------
-            print("loss_G ", loss_G)
-
             log.iterLogUpdate(loss_G.item())
             if batch_idx % 100 == 0:
                 log.draw_loss_curve()
