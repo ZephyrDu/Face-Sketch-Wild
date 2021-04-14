@@ -1,10 +1,10 @@
 import os
-import random
 
 gpus           = '0'
 seed           = 12345 
 batch_size     = 8
-learning_rate  = 1e-3
+D_learning_rate = 0.0004
+G_learning_rate = 0.0001
 epochs         = 40 
 vgg_weight     = './pretrain_model/vgg_conv.pth'
 weight_root    = './weight'
@@ -31,6 +31,8 @@ param          = [
         '--train-data {}'.format(" ".join(train_data)),
         '--train-style {}'.format(train_style),
         '--batch-size {}'.format(batch_size),
+        '--glr {}'.format(G_learning_rate),
+        '--dlr {}'.format(D_learning_rate),
         '--epochs {}'.format(epochs),
         '--vgg19-weight {}'.format(vgg_weight),
         '--weight-root {}'.format(weight_root),

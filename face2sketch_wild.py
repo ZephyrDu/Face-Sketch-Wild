@@ -36,7 +36,8 @@ def cmd_option():
     arg_parser.add_argument('--train-style', type=str, default='cufs', help='Styles used to train')
     arg_parser.add_argument('--seed', type=int, default=1234, help='Random seed for training')
     arg_parser.add_argument('--batch-size', type=int, default=6, help='Train batch size')
-    arg_parser.add_argument('--lr', type=float, default=1e-3, help='Learning rate for training')
+    arg_parser.add_argument('--glr', type=float, default= 0.0001, help='Learning rate for G')
+    arg_parser.add_argument('--dlr', type=float, default= 0.0004, help='Learning rate for D')
     arg_parser.add_argument('--epochs', type=int, default=40, help='Training epochs to generate')
     arg_parser.add_argument('--weight-root', type=str, default='./weight', help='Weight saving path')
     arg_parser.add_argument('--vgg19-weight', type=str, default='/home/cfchen/pytorch_models/vgg_conv.pth',
@@ -106,8 +107,8 @@ def train(args):
     ms = [int(1. / 4 * args.epochs), int(2. / 4 * args.epochs)]
 
     # optim_G = torch.optim.SGD(Gnet.parameters(), args.lr, momentum=0.9, weight_decay=1e-4)
-    optim_G = torch.optim.AdamW(Gnet.parameters(), args.lr)
-    optim_D = torch.optim.AdamW(Dnet.parameters(), args.lr)
+    optim_G = torch.optim.AdamW(Gnet.parameters(), args.glr)
+    optim_D = torch.optim.AdamW(Dnet.parameters(), args.dlr)
     scheduler_G = MultiStepLR(optim_G, milestones=ms, gamma=0.1)
     scheduler_D = MultiStepLR(optim_D, milestones=ms, gamma=0.1)
     mse_crit = nn.MSELoss()
