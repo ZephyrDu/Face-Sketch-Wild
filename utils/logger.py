@@ -1,7 +1,5 @@
 from __future__ import print_function
 import os
-from collections import OrderedDict
-import numpy as np
 
 import matplotlib
 matplotlib.use('Agg')  
@@ -22,6 +20,8 @@ class Logger():
         fig = plt.figure()
         ax  = fig.add_subplot(111)
         ax.plot(range(len(self.iter_log)), self.iter_log)
+        plt.ylabel('G loss')
+        plt.xlabel('iter')
         ax.set_title('Loss Curve')
         plt.tight_layout()
         fig.savefig(os.path.join(self.log_dir, 'epoch_summary.pdf'))
