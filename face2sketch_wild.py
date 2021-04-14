@@ -1,27 +1,26 @@
 from __future__ import print_function
+
+import argparse
+import copy
+import itertools
+from datetime import datetime
+from glob import glob
+from time import time
+
 import torch
 import torch.nn as nn
 from torch.optim.lr_scheduler import MultiStepLR
-from torchvision import transforms
 from torch.utils.data import DataLoader
+from torchvision import transforms
 
-import argparse
-import os
-import numpy as np
-from time import time
-from datetime import datetime
-import itertools
-import copy
-from glob import glob
-
-from utils.face_sketch_data import *
 from models.networks import SketchNet, DNet
 from models.vgg19 import vgg19
-from utils import loss
 from utils import img_process
-from utils import search_dataset
 from utils import logger
+from utils import loss
+from utils import search_dataset
 from utils import utils
+from utils.face_sketch_data import *
 from utils.metric import avg_score
 
 

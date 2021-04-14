@@ -2,10 +2,12 @@ from __future__ import print_function
 import os
 
 import matplotlib
-matplotlib.use('Agg')  
+
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
-class Logger():
+
+class Logger:
     def __init__(self, save_weight_path):
         self.log_dir = save_weight_path
         self.iter_log = []
@@ -18,7 +20,7 @@ class Logger():
 
     def draw_loss_curve(self):
         fig = plt.figure()
-        ax  = fig.add_subplot(111)
+        ax = fig.add_subplot(111)
         ax.plot(range(len(self.iter_log)), self.iter_log)
         plt.ylabel('G loss')
         plt.xlabel('iter')
@@ -26,7 +28,3 @@ class Logger():
         plt.tight_layout()
         fig.savefig(os.path.join(self.log_dir, 'epoch_summary.pdf'))
         plt.close(fig)
-
-            
-
-

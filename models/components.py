@@ -125,7 +125,7 @@ class SelfAttention(nn.Module):
         energy = torch.bmm(proj_query, proj_key)  # B * (W * H) * (W * H)
         attention = self.softmax(energy)  # B  * (N) * (N)
         proj_value = self.value_conv(x).view(m_batchsize, -1, width * height)  # B * c * (W * H)
-        # out = torch.bmm(proj_value, attention)  # B * c * (W * H)
+
         out = torch.bmm(proj_value, attention.permute(0, 2, 1))  # B * c * (W * H)
         out = out.view(m_batchsize, c, width, height)  # B * c * W * H
 
