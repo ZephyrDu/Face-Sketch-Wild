@@ -119,11 +119,17 @@ class SelfAttention(nn.Module):
         init_weights(self.value_conv)
 
     def forward(self, x):
+        """
+            inputs :
+                x : input feature maps( B * C * W * H)
+            returns :
+                out : self attention value + input feature
+        """
         m_batch_size, c, width, height = x.size()
         proj_query = self.query_conv(x).view(m_batch_size, -1, width * height).permute(0, 2, 1)  # B * (c//8) * (W * H)
         proj_key = self.key_conv(x).view(m_batch_size, -1, width * height)  # B * (c//8) * (W * H)
         energy = torch.bmm(proj_query, proj_key)  # B * (W * H) * (W * H)
-        attention = self.softmax(energy)  # B  * (N) * (N)
+        attention = self.softmax(energy)  # B  * N * N  (N = W*H)
         proj_value = self.value_conv(x).view(m_batch_size, -1, width * height)  # B * c * (W * H)
 
         out = torch.bmm(proj_value, attention.permute(0, 2, 1))  # B * c * (W * H)
