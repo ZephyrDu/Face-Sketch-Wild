@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="13c3dbaa-0b98-4c83-b68d-eafb5439d5e5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/networks.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/networks.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/components.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/components.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,9 +26,6 @@
       <filtered-out-file-type name="TAG" />
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
-  </component>
-  <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/models/networks.py" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="ProjectId" id="1pQHIgrg9s21DdpAwIVQ8n1AbCX" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -102,14 +98,7 @@
       <option name="project" value="LOCAL" />
       <updated>1619453430195</updated>
     </task>
-    <task id="LOCAL-00007" summary=".">
-      <created>1619453514071</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1619453514071</updated>
-    </task>
-    <option name="localTasksCounter" value="8" />
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
