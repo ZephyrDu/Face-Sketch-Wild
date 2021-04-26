@@ -101,7 +101,6 @@ def init_weights(m):
 
 class SelfAttention(nn.Module):
 
-
     def __init__(self, in_dim):
         super(SelfAttention, self).__init__()
         self.chanel_in = in_dim
