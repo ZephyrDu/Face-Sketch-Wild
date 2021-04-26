@@ -100,10 +100,7 @@ def init_weights(m):
 
 
 class SelfAttention(nn.Module):
-    """SelfAttention
-    --------------------
-    replica of https://github.com/heykeetae/Self-Attention-GAN
-    """
+
 
     def __init__(self, in_dim):
         super(SelfAttention, self).__init__()
