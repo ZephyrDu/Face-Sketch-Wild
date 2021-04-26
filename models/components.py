@@ -103,7 +103,7 @@ class SelfAttention(nn.Module):
 
     def __init__(self, in_dim):
         super(SelfAttention, self).__init__()
-        self.chanel_in = in_dim
+        self.channel_in = in_dim
 
         self.query_conv = nn.Conv2d(in_channels=in_dim, out_channels=in_dim // 8, kernel_size=1)
         self.key_conv = nn.Conv2d(in_channels=in_dim, out_channels=in_dim // 8, kernel_size=1)
@@ -115,15 +115,15 @@ class SelfAttention(nn.Module):
         init_weights(self.value_conv)
 
     def forward(self, x):
-        m_batchsize, c, width, height = x.size()
-        proj_query = self.query_conv(x).view(m_batchsize, -1, width * height).permute(0, 2, 1)  # B * (c//8) * (W * H)
-        proj_key = self.key_conv(x).view(m_batchsize, -1, width * height)  # B * (c//8) * (W * H)
+        m_batch_size, c, width, height = x.size()
+        proj_query = self.query_conv(x).view(m_batch_size, -1, width * height).permute(0, 2, 1)  # B * (c//8) * (W * H)
+        proj_key = self.key_conv(x).view(m_batch_size, -1, width * height)  # B * (c//8) * (W * H)
         energy = torch.bmm(proj_query, proj_key)  # B * (W * H) * (W * H)
         attention = self.softmax(energy)  # B  * (N) * (N)
-        proj_value = self.value_conv(x).view(m_batchsize, -1, width * height)  # B * c * (W * H)
+        proj_value = self.value_conv(x).view(m_batch_size, -1, width * height)  # B * c * (W * H)
 
         out = torch.bmm(proj_value, attention.permute(0, 2, 1))  # B * c * (W * H)
-        out = out.view(m_batchsize, c, width, height)  # B * c * W * H
+        out = out.view(m_batch_size, c, width, height)  # B * c * W * H
 
         out = self.gamma * out + x
         return out
