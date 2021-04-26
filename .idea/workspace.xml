@@ -27,6 +27,9 @@
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
   </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/models/networks.py" root0="SKIP_HIGHLIGHTING" />
+  </component>
   <component name="ProjectId" id="1pQHIgrg9s21DdpAwIVQ8n1AbCX" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
