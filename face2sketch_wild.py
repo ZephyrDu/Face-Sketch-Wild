@@ -9,7 +9,7 @@ from time import time
 
 import torch
 import torch.nn as nn
-from torch.optim.lr_scheduler import MultiStepLR
+from torch.optim.lr_scheduler import MultiStepLR,StepLR
 from torch.utils.data import DataLoader
 from torchvision import transforms
 
